@@ -45,49 +45,19 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash', 'c
         });
       };
 
-      this.getIssuesFromProjects = function (projects) {
-        var allIssues = [];
-
-        _.each(projects, function(project) {
-          allIssues = allIssues.concat(project.repo[0].responseJSON);
-        });
-
-        return allIssues;
-      };
-
       this.fetchIssues = function (ev, data) {
-        var userAgentIssuesDeferred, dispatcherIssuesDeferred, platformIssuesDeferred;
+        _.each(this.getIssuesByRepoName(data.projectName), function(repo) {
+          var repoDeferred = $.Deferred();
 
-        data.page = ('page' in data) ? (data.page + 1) : 1;
+          repo.apply(this).complete(repoDeferred.resolve);
 
-        userAgentIssuesDeferred = $.Deferred();
-        dispatcherIssuesDeferred = $.Deferred();
-        platformIssuesDeferred = $.Deferred();
-
-        this.fetchUserAgentIssues(data.page).complete(userAgentIssuesDeferred.resolve);
-        this.fetchDispatcherIssues(data.page).complete(dispatcherIssuesDeferred.resolve);
-        this.fetchPlatformIssues(data.page).complete(platformIssuesDeferred.resolve);
-
-        $.when(userAgentIssuesDeferred, dispatcherIssuesDeferred, platformIssuesDeferred).done(
-          function (userAgentIssues, dispatcherIssues, platformIssues) {
-            var projects = [{'projectName': 'pixelated-user-agent', 'repo': userAgentIssues},
-              {'projectName': 'pixelated-dispatcher', 'repo': dispatcherIssues},
-              {'projectName': 'pixelated-platform', 'repo': platformIssues}],
-            filteredProjects = this.filterProjectsByName(projects, data.projectName),
-            issuesFromProjects = this.getIssuesFromProjects(filteredProjects);
-
-            this.trigger('data:issues:refreshed', {issues: issuesFromProjects });
-
-            if(data.page == 1){
-              this.trigger('data:issues:clearExportCsvLink');
-            }
-
-            if(issuesFromProjects.length > 0){
-              this.trigger('data:issues:mountExportCsvLink', {issues: issuesFromProjects });
-              this.trigger('ui:needs:issues', data);
-            }
-          }.bind(this)
-        );
+          $.when(repoDeferred).done(
+            function(repoIssues) {
+              this.trigger('data:issues:refreshed', {issues: repoIssues.responseJSON});
+              this.trigger('data:issues:mountExportCsvLink', {issues: repoIssues.responseJSON});
+            }.bind(this)
+          );
+        }.bind(this));
       };
 
       this.assignMyselfToIssue = function (ev, assignData) {

@@ -1,8 +1,25 @@
 define([],
   function () {
     return function () {
-      this.fetchUserAgentIssues = function (page) {
-        return $.getJSON(this.repoIssuesURL(this.getURLFromProject("user-agent"), page));
+      this.getIssuesByRepoName = function (repoName) {
+        var fetchs = {
+          'user-agent': [this.fetchUserAgentIssues],
+          'dispatcher': [this.fetchDispatcherIssues],
+          'platform': [this.fetchPlatformIssues],
+          'all': [this.fetchUserAgentIssues,
+                  this.fetchDispatcherIssues,
+                  this.fetchPlatformIssues]
+        };
+
+        return fetchs[repoName] || "not found";
+      };
+
+      this.repositoriesNames = function() {
+        return [ 'user-agent', 'dispatcher', 'platform' ]
+      }
+
+      this.fetchUserAgentIssues = function () {
+        return $.getJSON(this.repoIssuesURL(this.getURLFromProject("user-agent")));
       };
 
       this.fetchDispatcherIssues = function (page) {
@@ -18,7 +35,7 @@ define([],
       };
 
       this.defaultOptions = function () {
-        return "per_page=100&state=all&" 
+        return "per_page=100&state=all&"
       };
 
       this.getPageParam = function(page){
@@ -29,7 +46,7 @@ define([],
         return url + this.accessToken();
       }
 
-      this.repoIssuesURL = function (repo, page) {      
+      this.repoIssuesURL = function (repo, page) {
         return this.authRequest(repo + '/issues?' + this.defaultOptions() + this.getPageParam(page));
       };
 
