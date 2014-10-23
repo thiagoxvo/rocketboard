@@ -18,6 +18,7 @@ module.exports = function (config) {
       // loaded without require
       'app/bower_components/jquery/dist/jquery.js',
       'app/bower_components/underscore/underscore.js',
+      'app/bower_components/hogan/web/1.0.0/hogan.js',
       'app/bower_components/jasmine-jquery/lib/jasmine-jquery.js',
       'app/bower_components/jasmine-flight/lib/jasmine-flight.js',
       // loaded with require
