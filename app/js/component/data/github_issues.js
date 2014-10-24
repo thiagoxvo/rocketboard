@@ -213,11 +213,47 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash', 'c
         return className.search('done') != -1 ? 'closed' : 'open';
       };
 
-      this.changeNewIssueLink = function(event, projectName){
-        $(".link").attr("href", this.newIssueURL(projectName));
+      this.changeNewIssueLink = function(ev, data){
+        data['eventToReturn'] = "ui:issue:createIssuesURL"
+
+        if (!data.user) {
+          this.trigger(document, 'ui:needs:githubUser', data);
+          return;
+        }
+
+        if (!data.repositories) {
+          this.trigger('data:repositories', data);
+          return;
+        }
+
+        _.each(JSON.parse(data.repositories), function(repo) {
+          $(".link").attr("href", this.newIssueURL(repo.url))
+        }.bind(this))
+      };
+
+      this.fillsSelects = function(ev, data){
+        var selects = $('.repositories')
+        data['eventToReturn'] = "ui:fills:selects"
+
+        if (!data.user) {
+          this.trigger(document, 'ui:needs:githubUser', data);
+          return;
+        }
+
+        if (!data.repositories) {
+          this.trigger('data:repositories', data);
+          return;
+        }
+
+        _.each(selects, function(select) {
+          _.each(JSON.parse(data.repositories), function(repo) {
+            select.appendChild(new Option(repo.name, repo.name))
+          });
+        });
       };
 
       this.after('initialize', function () {
+        this.on('ui:fills:selects', this.fillsSelects);
         this.on('ui:needs:issues', this.fetchIssues);
         this.on('ui:add:issue', this.addIssue);
         this.on('ui:create:issue', this.createIssue);

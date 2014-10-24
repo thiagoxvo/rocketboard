@@ -17,12 +17,7 @@
               + CREATE ISSUE
       </button>
       <a id="export_csv" class="btn btn-success btn-xs" href="javascript:void(0)">EXPORT TO CSV </a>
-      <select id="filter-repo">
-        <option>All repositories</option>
-        <option>user-agent</option>
-        <option>platform</option>
-        <option>dispatcher</option>
-      </select>
+      <select id="filter-repo" class="repositories"> <option>All repositories</option> </select>
     </header>
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -38,11 +33,7 @@
            <textarea placeholder="Enter text here..." id="issueBody" class="form-control field" rows="3"></textarea>
            <br/>
            <label for="projects">Project</label>
-           <select id="projects" class="form-control">
-             <option value="user-agent">User Agent</option>
-             <option value="dispatcher">Dispatcher</option>
-             <option value="platform">Platform</option>
-           </select>
+           <select id="projects" class="form-control repositories"> </select>
           </div>
           <div class="modal-footer">
             <button id="create_issue" type="button" class="btn btn-primary">Create</button>

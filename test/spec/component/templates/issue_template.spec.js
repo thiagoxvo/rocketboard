@@ -3,14 +3,6 @@ describeMixin('component/templates/issue_template', function () {
     this.setupComponent();
   });
 
-  it('returns owner name passing url', function () {
-    expect(this.component.getOwnerName(
-        {
-          'url': "https://api.github.com/repos/guipdutra/test_issues_kanboard/issues/1"
-        }
-    )).toEqual("guipdutra")
-  });
-
   it('returns repository name passing url', function () {
     expect(this.component.getRepoName(
         {

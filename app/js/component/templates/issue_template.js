@@ -19,8 +19,8 @@ define([],
 
     function issueTemplate() {
       this.getRepoName = function (issue) {
-        var repoNameRegExp = /pixelated-project\/(pixelated-[a-z-]+)/;
-        return repoNameRegExp.exec(issue.url)[1];
+        var repoNameRegExp = /repos\/([a-z_]*)\/([a-z_]*)\/issues/;
+        return repoNameRegExp.exec(issue.url)[2];
       };
 
       this.clearHuboardInfo = function (issue) {
