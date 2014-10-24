@@ -41,7 +41,7 @@ define(
       this.displayIssues = function (ev, data) {
         var issues = this.filterAndReorderIssues(data.issues);
         issues.forEach(function (issue) {
-          this.$node.prepend(this.renderIssue(issue));
+          this.$node.prepend(this.renderIssue(issue, data.repoColor));
         }.bind(this));
 
         $('.panel-heading.backlog-header .issues-count').text(' (' + $('.issue-track.backlog .issue').length + ')');
@@ -51,8 +51,8 @@ define(
         $('.panel-heading.done .issues-count').text(' (' + $('.issue-track.done .issue').length + ')');
       };
 
-      this.renderIssue = function (issue) {
-        var renderedIssue = $(this.render(issue));
+      this.renderIssue = function (issue, repoColor) {
+        var renderedIssue = $(this.render(issue, repoColor));
         if (renderedIssue.find('.assignee-avatar').attr('src') != "" ) {
           renderedIssue.find('.empty-avatar').hide();
           renderedIssue.find('.empty-avatar-label').hide();

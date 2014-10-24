@@ -76,12 +76,17 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash', 'c
 
         _.each(JSON.parse(data.repositories), function(repo) {
           var repoDeferred = $.Deferred();
+          var randomColor  = '#'+Math.floor(Math.random()*16777215).toString(16);
 
           requestByRepoUrl(repo.url).apply(this).complete(repoDeferred.resolve);
 
           $.when(repoDeferred).done(
             function(repoIssues) {
-              this.trigger('data:issues:refreshed', {issues: repoIssues.responseJSON});
+              this.trigger('data:issues:refreshed', {
+                  issues: repoIssues.responseJSON,
+                  repoColor: randomColor
+              });
+
               this.trigger('data:issues:mountExportCsvLink', {issues: repoIssues.responseJSON});
             }.bind(this)
           );

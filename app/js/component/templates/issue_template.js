@@ -50,10 +50,11 @@ define([],
         });
       }
 
-      this.render = function (issue) {
+      this.render = function (issue, repoColor) {
         var renderedIssue;
         issue.repoName = this.getRepoName(issue);
         issue.labelsName = this.removeColumnsLabels(issue.labels);
+        issue.repoColor = repoColor
         issue.kanbanState = this.getColumnLabel(issue.labels)[0].name;
         renderedIssue = this.template.render(this.clearHuboardInfo(issue));
         return renderedIssue;
@@ -68,7 +69,7 @@ define([],
                 '<span class="empty-avatar-label">ASSIGN ME</span>' +
                 '<img class="assignee-avatar" title="{{assignee.login}}" src="{{assignee.avatar_url}}" />' +
               '</a>' +
-              '<a href="{{html_url}}" target="_blank"><span class="issue-number right">#{{number}}</span></a>' +
+              '<a href="{{html_url}}" target="_blank"><span style="background-color: {{repoColor}};" class="issue-number right">#{{number}}</span></a>' +
             '</div>' +
             '<div class="issue-body">' +
               '<a class="title list-group-item-heading" href="{{html_url}}" target="_blank" data-toggle="tooltip" title="{{body}}">' +
