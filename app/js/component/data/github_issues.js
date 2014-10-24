@@ -19,20 +19,30 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash', 'c
 
     function githubIssues() {
       this.createIssue = function (ev, data) {
-        var url, repositoryURL;
-        repositoryURL = this.getURLFromProject(data.projectName);
-        url = this.repoIssuesURL(repositoryURL);
+        data['eventToReturn'] = "ui:create:issue"
 
-        $.ajax({
-          type: 'POST',
-          url: url,
-          data: JSON.stringify({'title': data.issueTitle,
-                                'body': data.issueBody,
-                                'labels': ["0 - Backlog"] }),
-          success: function (response, status, xhr) {
-            this.trigger("ui:add:issue", {"issue": response})
-          }.bind(this)
-        });
+        if (!data.user) {
+          this.trigger('ui:needs:githubUser', data);
+          return;
+        }
+
+        if (!data.repositories) {
+          this.trigger('data:repositories', data);
+          return;
+        }
+
+        _.each(JSON.parse(data.repositories), function(repo) {
+          $.ajax({
+              type: 'POST',
+              url: this.repoIssuesURL(repo.url),
+              data: JSON.stringify({'title': data.issueTitle,
+                  'body': data.issueBody,
+                  'labels': ["0 - Backlog"] }),
+              success: function (response, status, xhr) {
+                this.trigger("ui:add:issue", {"issue": response})
+              }.bind(this)
+          });
+        }.bind(this));
       };
 
       this.addIssue = function (ev, data) {

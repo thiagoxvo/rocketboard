@@ -94,10 +94,9 @@ define(
     });
 
     $("#projects").change(function(){
-      $(document).trigger("ui:issue:createIssuesURL", $(this).val());
+      $(document).trigger("ui:issue:createIssuesURL", {'repoName': $(this).val()});
     });
 
-    $(document).trigger("ui:issue:createIssuesURL", $("#projects").val());
     $(document).trigger('ui:draggable');
     $(document).trigger('ui:needs:githubUser');
   }
