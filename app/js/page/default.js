@@ -38,7 +38,9 @@ define(
     track.attachTo('.issue-track.quality-assurance', {trackType: '3 - Quality Assurance'});
     track.attachTo('.issue-track.done', {trackType: '4 - Done'});
 
-    $(document).trigger('ui:needs:issues', {projectName: 'all' });
+    $(document).trigger('ui:needs:issues', {'repoName': 'all'});
+
+    $(document).trigger("ui:fills:selects", {'repoName': 'all'});
 
     function triggerRocketAnimation() {
         $(".panel-heading.done img.plain").hide();
@@ -77,7 +79,7 @@ define(
       $(document).trigger('ui:create:issue',
         { 'issueTitle': $("#issueTitle").val(),
           'issueBody':  $("#issueBody").val(),
-          'projectName': $("#projects").val() });
+          'repoName': $("#projects").val() });
 
       $("#myModal").modal('hide')
       $("#myModal input, textarea").val('')
@@ -87,9 +89,9 @@ define(
       $('.issue').remove();
 
       if ($(this).val() == 'All repositories') {
-        $(document).trigger('ui:needs:issues', {projectName: 'all' });
+        $(document).trigger('ui:needs:issues', {'repoName': 'all'});
       } else {
-        $(document).trigger('ui:needs:issues', {projectName: $(this).val()});
+        $(document).trigger('ui:needs:issues', {'repoName': $(this).val()});
       }
     });
 

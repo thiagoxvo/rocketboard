@@ -49,12 +49,6 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash', 'c
         this.trigger('data:issues:refreshed', {issues: data});
       }
 
-      this.filterProjectsByName = function (projects, projectName){
-        return _.filter(projects, function(project) {
-          return project.projectName == projectName || projectName == 'all'
-        });
-      };
-
       this.fetchIssues = function (ev, data) {
         var eventToReturn = "ui:needs:issues";
 
@@ -228,7 +222,6 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash', 'c
         this.on('ui:add:issue', this.addIssue);
         this.on('ui:create:issue', this.createIssue);
         this.on('ui:assigns:user', this.assignMyselfToIssue);
-        this.on('data:githubUser:here', this.assignMyselfToIssue);
         this.on('ui:draggable', this.draggable);
         this.on('ui:issue:createIssuesURL', this.changeNewIssueLink);
       });
