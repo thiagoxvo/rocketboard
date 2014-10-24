@@ -93,11 +93,13 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash', 'c
         }.bind(this));
       };
 
-      this.assignMyselfToIssue = function (ev, assignData) {
+      this.assignMyselfToIssue = function (ev, data) {
         var user, issue, url;
-        if (assignData != undefined) {
-          user = assignData.user;
-          issue = assignData.issue;
+        data['eventToReturn'] = "ui:assigns:user"
+
+        if (data != undefined) {
+          user = data.user;
+          issue = data.issue;
         }
 
         if (!issue) {
@@ -105,7 +107,7 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash', 'c
         }
 
         if (!user) {
-          this.trigger(document, 'ui:needs:githubUser', assignData);
+          this.trigger(document, 'ui:needs:githubUser', data);
           return;
         }
 
