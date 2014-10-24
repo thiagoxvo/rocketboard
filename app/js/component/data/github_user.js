@@ -31,7 +31,9 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash'],
             newData.user = userData
           }
 
-          this.trigger('data:githubUser:here', newData);
+          if (newData) {
+            this.trigger(newData.eventToReturn, newData);
+          }
         }.bind(this));
       }
 

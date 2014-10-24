@@ -1,39 +1,6 @@
 define([],
   function () {
     return function () {
-      this.getIssuesByRepoName = function (repoName) {
-        var fetchs = {
-          'user-agent': [this.fetchUserAgentIssues],
-          'dispatcher': [this.fetchDispatcherIssues],
-          'platform': [this.fetchPlatformIssues],
-          'all': [this.fetchUserAgentIssues,
-                  this.fetchDispatcherIssues,
-                  this.fetchPlatformIssues]
-        };
-
-        return fetchs[repoName] || "not found";
-      };
-
-      this.repositoriesNames = function() {
-        return [ 'user-agent', 'dispatcher', 'platform' ]
-      }
-
-      this.fetchUserAgentIssues = function () {
-        return $.getJSON(this.repoIssuesURL(this.getURLFromProject("user-agent")));
-      };
-
-      this.fetchDispatcherIssues = function (page) {
-        return $.getJSON(this.repoIssuesURL(this.getURLFromProject("dispatcher"), page));
-      };
-
-      this.fetchPlatformIssues = function (page) {
-        return $.getJSON(this.repoIssuesURL(this.getURLFromProject("platform"), page));
-      };
-
-      this.fetchProjectIssues = function (page) {
-        return $.getJSON(this.repoIssuesURL(this.getURLFromProject("project-issues"), page));
-      };
-
       this.defaultOptions = function () {
         return "per_page=100&state=all&"
       };

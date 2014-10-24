@@ -46,10 +46,34 @@ define(['flight/lib/component', 'component/mixins/with_auth_token_from_hash', 'c
       };
 
       this.fetchIssues = function (ev, data) {
-        _.each(this.getIssuesByRepoName(data.projectName), function(repo) {
+        var eventToReturn = "ui:needs:issues";
+
+        var requestByRepoUrl = function (repoUrl) {
+          return function() {
+            return $.getJSON(this.repoIssuesURL(repoUrl));
+          };
+        };
+
+        data['eventToReturn'] = eventToReturn
+
+        if (!data.repoName) {
+          return;
+        }
+
+        if (!data.user) {
+          this.trigger('ui:needs:githubUser', data);
+          return;
+        }
+
+        if (!data.repositories) {
+          this.trigger('data:repositories', data);
+          return;
+        }
+
+        _.each(JSON.parse(data.repositories), function(repo) {
           var repoDeferred = $.Deferred();
 
-          repo.apply(this).complete(repoDeferred.resolve);
+          requestByRepoUrl(repo.url).apply(this).complete(repoDeferred.resolve);
 
           $.when(repoDeferred).done(
             function(repoIssues) {
