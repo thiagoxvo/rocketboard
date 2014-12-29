@@ -6,15 +6,8 @@ function addRepo(name, key, label) {
   env[key] && (repos[name] = env[key]);
   env[key] && (labels[name] = (label || repos[name]));
 }
-addRepo('project-issues', 'PX_PROJECT_ISSUES', 'Project Issues');
-addRepo('platform', 'PX_PLATFORM', 'Platform');
-addRepo('dispatcher', 'PX_DISPATCHER', 'Dispatcher');
-addRepo('user-agent', 'PX_USER_AGENT', 'User Agent');
-addRepo('website', 'PX_PAGES', 'Website');
 
-for(i = 0; i < 5; i++) {
-  addRepo(env['REPO_' + i + '_NAME'] || i + 'th', 'REPO_' + i + '_URL');
-}
+addRepo('rb-issues', 'RB_ISSUES', 'Issues');
 
 module.exports = {
   repos: repos,

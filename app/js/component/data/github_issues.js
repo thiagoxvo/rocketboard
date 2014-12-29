@@ -111,7 +111,7 @@ define([
             var projects = _(names).map(function(name, idx) {
               return {
                 'projectName': name,
-                'repo': issuesResults[idx]
+                'repo': (names.length > 1) ? issuesResults[idx] : issuesResults
               }
             });
 
